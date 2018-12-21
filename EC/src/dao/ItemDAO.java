@@ -17,7 +17,6 @@ import beans.ItemDataBeans;
 public class ItemDAO {
 
 
-
 	/**
 	 * ランダムで引数指定分のItemDataBeansを取得
 	 * @param limit 取得したいかず
@@ -30,7 +29,8 @@ public class ItemDAO {
 		try {
 			con = DBManager.getConnection();
 
-			st = con.prepareStatement("SELECT * FROM m_item ORDER BY RAND() LIMIT ? ");
+			st = con.prepareStatement(" SELECT * FROM m_item ORDER BY RAND() LIMIT ? ");
+														//ランダムに（）の中の数だけ表示
 			st.setInt(1, limit);
 
 			ResultSet rs = st.executeQuery();
@@ -64,14 +64,15 @@ public class ItemDAO {
 	 * @return ItemDataBeans
 	 * @throws SQLException
 	 */
-	public static ItemDataBeans getItemByItemID(int itemId) throws SQLException {
+
+	public static ItemDataBeans getItemByItemID(int id) throws SQLException {
 		Connection con = null;
 		PreparedStatement st = null;
 		try {
 			con = DBManager.getConnection();
 
 			st = con.prepareStatement("SELECT * FROM m_item WHERE id = ?");
-			st.setInt(1, itemId);
+			st.setInt(1, id);
 
 			ResultSet rs = st.executeQuery();
 
@@ -79,7 +80,7 @@ public class ItemDAO {
 			if (rs.next()) {
 				item.setId(rs.getInt("id"));
 				item.setName(rs.getString("name"));
-				item.setDetail(rs.getString("name"));
+				item.setDetail(rs.getString("detail"));
 				item.setPrice(rs.getInt("price"));
 				item.setFileName(rs.getString("file_name"));
 			}
@@ -112,18 +113,24 @@ public class ItemDAO {
 			int startiItemNum = (pageNum - 1) * pageMaxItemCount;
 			con = DBManager.getConnection();
 
+
 			if (searchWord.length() == 0) {
 				// 全検索
 				st = con.prepareStatement("SELECT * FROM m_item ORDER BY id ASC LIMIT ?,? ");
 				st.setInt(1, startiItemNum);
 				st.setInt(2, pageMaxItemCount);
 			} else {
-				// 商品名検索
-				st = con.prepareStatement("SELECT * FROM m_item WHERE name = ?  ORDER BY id ASC LIMIT ?,? ");
-				st.setString(1,searchWord);
+			// 商品名検索
+			//st = con.prepareStatement("SELECT * FROM m_item WHERE name = ?  ORDER BY id ASC LIMIT ?,? "); 最初から書かれてたコード
+				//SQL文の変更
+				st = con.prepareStatement("SELECT * FROM m_item WHERE  name LIKE ? ORDER BY id ASC LIMIT ?,? ");
+				//setString文の変更
+				st.setString(1, "%" + searchWord + "%");
+
 				st.setInt(2, startiItemNum);
 				st.setInt(3, pageMaxItemCount);
 			}
+
 
 			ResultSet rs = st.executeQuery();
 			ArrayList<ItemDataBeans> itemList = new ArrayList<ItemDataBeans>();

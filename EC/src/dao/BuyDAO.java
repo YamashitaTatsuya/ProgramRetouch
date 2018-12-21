@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import base.DBManager;
 import beans.BuyDataBeans;
@@ -33,7 +35,7 @@ public class BuyDAO {
 					"INSERT INTO t_buy(user_id,total_price,delivery_method_id,create_date) VALUES(?,?,?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 			st.setInt(1, bdb.getUserId());
-			st.setInt(2, bdb.getTotalPrice());
+			st.setInt(2, bdb.getTotalPrice() + bdb.getDeliveryMethodPrice());
 			st.setInt(3, bdb.getDelivertMethodId());
 			st.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
 			st.executeUpdate();
@@ -55,6 +57,75 @@ public class BuyDAO {
 		}
 	}
 
+
+
+
+
+
+	//自分で足したコード
+
+	//購入情報を呼び出すコード
+
+    public List<BuyDataBeans> findByInfo(int userId) {
+        Connection conn = null;
+        List<BuyDataBeans> buyList = new ArrayList<BuyDataBeans>();
+
+        try {
+            // データベースへ接続
+            conn = DBManager.getConnection();
+
+            // SELECT文を準備
+            // TODO: 未実装：管理者以外を取得するようSQLを変更した
+            String sql = "SELECT t_buy.id, create_date, name, total_price FROM t_buy INNER JOIN m_delivery_method ON t_buy.delivery_method_id = m_delivery_method.id WHERE user_id = ? ORDER BY t_buy.id DESC  ";
+
+            // INNER JOIN m_delivery_method ON t_buy.delivery_method_id = m_delivery_method.id //
+
+             // SELECTを実行し、結果表を取得
+            PreparedStatement stmt = conn.prepareStatement(sql);
+
+            stmt.setInt(1, userId);
+
+            ResultSet rs = stmt.executeQuery();
+
+
+            // 結果表に格納されたレコードの内容を
+            // Userインスタンスに設定し、buyListインスタンスに追加
+            while (rs.next()) {
+
+            	int id = rs.getInt("t_buy.id");
+                Timestamp createDate = rs.getTimestamp("create_date");
+    	        String deliveryMethodName = rs.getString("name");
+    	        int totalPrice = rs.getInt("total_price");
+
+    	        BuyDataBeans buy = new BuyDataBeans(id,createDate,deliveryMethodName,totalPrice);
+
+                buyList.add(buy);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            // データベース切断
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+        }
+        return buyList;
+    }
+
+
+
+
+
+
+    //自分で足したコード ここまで
+
 	/**
 	 * 購入IDによる購入情報検索
 	 * @param buyId
@@ -64,6 +135,7 @@ public class BuyDAO {
 	 * 				呼び出し元にスローさせるため
 	 */
 	public static BuyDataBeans getBuyDataBeansByBuyId(int buyId) throws SQLException {
+
 		Connection con = null;
 		PreparedStatement st = null;
 		try {
@@ -74,6 +146,7 @@ public class BuyDAO {
 							+ " JOIN m_delivery_method"
 							+ " ON t_buy.delivery_method_id = m_delivery_method.id"
 							+ " WHERE t_buy.id = ?");
+
 			st.setInt(1, buyId);
 
 			ResultSet rs = st.executeQuery();

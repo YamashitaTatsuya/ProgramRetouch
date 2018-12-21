@@ -37,7 +37,9 @@
 											<td class="center">${cartInItem.price}円</td>
 											<td class="center">${cartInItem.price}円</td>
 										</tr>
+
 									</c:forEach>
+
 									<tr>
 
 										<td class="center">${bdb.deliveryMethodName}</td>
@@ -47,8 +49,10 @@
 									<tr>
 										<td class="center"></td>
 										<td class="center">合計</td>
-										<td class="center">${bdb.totalPrice}円</td>
+										<td class="center">${bdb.totalPrice + bdb.deliveryMethodPrice}円</td>
 									</tr>
+
+
 								</tbody>
 							</table>
 						</div>

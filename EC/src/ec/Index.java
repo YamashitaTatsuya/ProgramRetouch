@@ -28,11 +28,12 @@ public class Index extends HttpServlet {
 
 			//商品情報を取得
 			ArrayList<ItemDataBeans>itemList = ItemDAO.getRandItem(4);
+														//()の中は4つ表示の意味
 
 			//リクエストスコープにセット
 			request.setAttribute("itemList", itemList);
 
-			//セッションにsearchWordが入っていたら破棄する
+			//セッションにsearchWordが入っていたら破棄する→このコードがなくなると検索結果が表示されなくなった。
 			String searchWord = (String)session.getAttribute("searchWord");
 			if(searchWord != null) {
 				session.removeAttribute("searchWord");

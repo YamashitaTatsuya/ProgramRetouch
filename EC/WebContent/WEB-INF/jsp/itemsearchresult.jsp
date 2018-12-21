@@ -20,6 +20,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="container">
 		<div class="row center">
 			<h5 class=" col s12 light">検索結果</h5>
@@ -43,6 +44,7 @@
 						</div>
 					</div>
 				</div>
+
 				<c:if test="${(status.index + 1) % 4 == 0}">
 			</div>
 			<div class="row">

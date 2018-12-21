@@ -15,6 +15,20 @@ public class ItemDataBeans implements Serializable {
 	private String fileName;
 
 
+	//自分で足したコード
+
+	public ItemDataBeans() {
+	}
+
+	//購入詳細で使うコンストラクタ
+	public ItemDataBeans(int id,String name,int price) {
+
+			this.id = id;
+			this.name = name;
+			this.price = price;
+
+		}
+
 	public int getId() {
 		return id;
 	}

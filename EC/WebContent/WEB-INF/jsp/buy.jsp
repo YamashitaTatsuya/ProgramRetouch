@@ -36,6 +36,7 @@
 												<td class="center">${cartInItem.name}</td>
 												<td class="center">${cartInItem.price}円</td>
 												<td class="center">${cartInItem.price}円</td>
+
 											</tr>
 										</c:forEach>
 										<tr>

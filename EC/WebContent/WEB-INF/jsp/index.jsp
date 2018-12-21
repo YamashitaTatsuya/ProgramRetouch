@@ -18,7 +18,7 @@
 			<div class="row center">
 				<div class="input-field col s8 offset-s2">
 					<form action="ItemSearchResult">
-						<i class="material-icons prefix">search</i> <input type="text" name="search_word">
+						 <i class="material-icons prefix">search</i><input type="text" name="search_word">
 					</form>
 				</div>
 			</div>

@@ -21,6 +21,23 @@ public class BuyDataBeans  implements Serializable {
 	private int deliveryMethodPrice;
 
 
+	//自分で足したコード
+
+	public BuyDataBeans() {
+
+	}
+
+	//購入履歴で使うコンストラクタ
+	public BuyDataBeans(int id,Date buyDate,String  delivertMethodName,int totalPrice) {
+		this.id = id;
+		this.buyDate = buyDate;
+		this.deliveryMethodName = delivertMethodName;
+		this.totalPrice = totalPrice;
+
+	}
+
+	//ここまで
+
 	public int getId() {
 		return id;
 	}
